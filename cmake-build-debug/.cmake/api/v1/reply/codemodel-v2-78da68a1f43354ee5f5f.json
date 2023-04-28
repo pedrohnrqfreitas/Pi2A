@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Pi2A::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Pi2A-Debug-950e3dd97a2f1e170996.json",
+					"jsonFile" : "target-Pi2A-Debug-5b628ea8ede1ea8c28ad.json",
 					"name" : "Pi2A",
 					"projectIndex" : 0
 				}
@@ -55,6 +55,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 3
+		"minor" : 4
 	}
 }
