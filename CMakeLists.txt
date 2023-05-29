@@ -3,4 +3,4 @@ project(Pi2A C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Pi2A main.c)
+add_executable(Pi2A skiplist.c)
