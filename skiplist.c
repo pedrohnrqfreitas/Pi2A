@@ -3,7 +3,7 @@
 #include <time.h>
 
 //define
-#define max_level 6
+#define max_level 16
 
 //structs
 typedef struct Node{
@@ -15,33 +15,6 @@ typedef struct skiplist{
     int level;
     Node* inicio[max_level];
 }Skiplist;
-
-//funções
-int rand_level();
-Skiplist* create_skiplist();
-Node* create_node(int level);
-void insert_inicio(int key, Skiplist* lista);
-void insert(int key,  Skiplist *lista);
-void print_skiplist(Skiplist* skiplist);
-int search(int key, Skiplist *lista);
-
-int main(){
-    Skiplist* skiplist = create_skiplist();
-
-    insert(5, skiplist);
-    insert(4, skiplist);
-    insert(6, skiplist);
-    insert(2, skiplist);
-    insert(1, skiplist);
-
-    print_skiplist(skiplist);
-
-    if(search(5, skiplist)){
-        printf("achei\n");
-    }
-
-    
-}
 
 int rand_level() {
     static int initialized = 0;
@@ -143,4 +116,31 @@ int search(int key, Skiplist *lista){
         }
     }
     return 0;
+}
+
+int remover(int key, Skiplist *lista){
+    if (lista->inicio[0] == NULL) {
+        return 0;
+    } 
+    else {
+        Node *aux2;
+        for(int i = max_level - 1; i >= 0; i--){
+            Node *aux = lista->inicio[i];
+            if(aux->key = key){
+                lista->inicio[i] = aux->next[i];
+                return 1;
+            }
+            else{
+                while (aux->next[i] != NULL && aux->next[i]->key <= key){
+                    aux2 = aux;
+                    aux = aux->next[i];
+                }
+                if(aux->key == key){
+                    aux2->next[i] = aux->next[i];
+                    free(aux);
+                }
+            }
+        }
+        return 0;
+    }
 }
