@@ -3,7 +3,7 @@
 #include <time.h>
 
 //define
-#define max_level 16
+#define max_level 6
 
 //structs
 typedef struct Node{
@@ -100,7 +100,7 @@ void print_skiplist(Skiplist* skiplist){
     }
 }
 
-int search(int key, Skiplist *lista){
+Node *search(int key, Skiplist *lista){
     for(int i = max_level - 1; i >= 0; i--){
         Node *aux = lista->inicio[i];
         if(aux == NULL){
@@ -109,13 +109,13 @@ int search(int key, Skiplist *lista){
         else{
             while(aux != NULL && aux->key <= key){
                 if(aux->key == key){
-                return 1;
+                return aux;
                 }
                 aux = aux->next[i];
             }
         }
     }
-    return 0;
+    return NULL;
 }
 
 int remover(int key, Skiplist *lista){
@@ -123,24 +123,47 @@ int remover(int key, Skiplist *lista){
         return 0;
     } 
     else {
+        Node *update[max_level];
         Node *aux2;
+        for(int i = 0; i < max_level; i++){
+            update[i] = NULL;
+        }
         for(int i = max_level - 1; i >= 0; i--){
             Node *aux = lista->inicio[i];
-            if(aux->key = key){
+            if(aux == NULL){
+                continue;
+            }
+            if(aux->key == key){
                 lista->inicio[i] = aux->next[i];
-                return 1;
+            }
+            if(aux->next[i] == NULL){
+                continue;
             }
             else{
-                while (aux->next[i] != NULL && aux->next[i]->key <= key){
-                    aux2 = aux;
+                while (aux->next[i] != NULL && aux->next[i]->key < key){
                     aux = aux->next[i];
+                    if(aux->next[i] == NULL){
+                        break;
+                    }
                 }
-                if(aux->key == key){
-                    aux2->next[i] = aux->next[i];
-                    free(aux);
+                if(aux->next[i] == NULL){
+                    continue;
+                }
+                if(aux->next[i]->key == key){
+                    update[i] = aux;
+                    aux2 = aux->next[i];
                 }
             }
         }
-        return 0;
+        if(update[0] == NULL){
+                return 0;
+        }
+        for(int i = 0; i < max_level; i++){
+            if(update[i] != NULL){
+                update[i]->next[i] = aux2->next[i];
+            }
+        }
+        free(aux2);
+        return 1;
     }
 }
