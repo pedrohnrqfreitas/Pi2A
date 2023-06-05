@@ -102,7 +102,7 @@ void print_skiplist(Skiplist* skiplist){
         Node* aux = skiplist->inicio[i];
         printf("Level %d: ", i);
         while(aux != NULL){
-            printf("%d ", aux->key);
+            printf("%lld ", aux->key);
             aux = aux->next[i];
             
         }
