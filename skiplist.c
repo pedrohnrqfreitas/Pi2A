@@ -6,8 +6,19 @@
 #define max_level 6
 
 //structs
+typedef struct Dado{
+    char idade[4];
+    char sexo[2];
+    char cor[21];
+    char municipio[31];
+    char grupoAtendimento[61];
+    char categoria[31];
+    char fabricante[31];
+    char dose[16];
+}Dado;
 typedef struct Node{
     int key;
+    Dado *dado;
     struct Node* next[max_level];
 }Node;
 
@@ -37,14 +48,15 @@ Skiplist* create_skiplist(){
     return skiplist;
 }
 
-Node* create_node(int level){
+Node* create_node(int level,Dado dado){
     Node* newnode = (Node*) malloc(sizeof(Node));
+    newnode->dado = &dado;
     return newnode;
 }
 
-void insert_inicio(int key, Skiplist* lista){
+void insert_inicio(int key,Dado dado, Skiplist* lista){
     int level = rand_level();
-    Node* aux = create_node(level);
+    Node* aux = create_node(level,dado);
     aux->key = key;
     lista->level = level;
     for(int i = level; i >= 0; i--){
@@ -53,13 +65,13 @@ void insert_inicio(int key, Skiplist* lista){
     }
 }
 
-void insert(int key, Skiplist *lista) {
+void insert(int key, Dado dado, Skiplist *lista) {
     if (lista->inicio[0] == NULL) {
-        insert_inicio(key, lista);
+        insert_inicio(key, dado, lista);
     } 
     else {
         int level = rand_level();
-        Node *novo = create_node(level);
+        Node *novo = create_node(level,dado);
         novo->key = key;
         for(int i = level; i >= 0; i--){
             Node *aux = lista->inicio[i];

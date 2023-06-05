@@ -5,7 +5,18 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define max_level 16
+#define max_level 6
+
+typedef struct Dado{
+    char idade[4];
+    char sexo[2];
+    char cor[21];
+    char municipio[31];
+    char grupoAtendimento[61];
+    char categoria[31];
+    char fabricante[31];
+    char dose[16];
+}Dado;
 
 typedef struct Node{
     int key;
@@ -19,9 +30,9 @@ typedef struct skiplist{
 
 int rand_level();
 Skiplist* create_skiplist();
-Node* create_node(int level);
-void insert_inicio(int key, Skiplist* lista);
-void insert(int key, Skiplist *lista);
+Node* create_node(int level,Dado dado);
+void insert_inicio(int key,Dado dado, Skiplist* lista);
+void insert(int key, Dado dado, Skiplist *lista);
 void print_skiplist(Skiplist* skiplist);
 int search(int key, Skiplist *lista);
 int remover(int key, Skiplist *lista);
