@@ -73,31 +73,31 @@ int leitor_csv(Skiplist *skiplist){
                         //sequencia de ifs atribuindo os dados 
                        switch (atual)
                        {
-                       case 2:
+                       case 0:
                         dado->idade = field;
                         break;
-                       case 4:
+                       case 1:
                         dado->sexo = field;
                         break;
-                       case 6:
+                       case 2:
                         dado->cor = field;
                         break;
-                       case 9:
+                       case 3:
                         dado->municipio = field;
                         break;
-                       case 11:
+                       case 4:
                         dado->uf = field;
                         break;
-                       case 21:
+                       case 5:
                         dado->grupoAtendimento = field;
                         break;
-                       case 23:
+                       case 6:
                         dado->categoria = field;
                         break;
-                       case 25:
+                       case 7:
                         dado->fabricante = field;
                         break;
-                       case 28:
+                       case 8:
                         dado->dose = field;
                         break;
                        default:
