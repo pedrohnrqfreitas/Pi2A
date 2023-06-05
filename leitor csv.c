@@ -20,9 +20,11 @@ int findColum(int *array, int size, int colum){
 }
 
 
-int leitor_csv(){
-        FILE *file;
+int leitor_csv(Skiplist *skiplist){
+        FILE *exel[10];
+        FILE *cpf;
         char line[MAX_LINE_LENGTH];
+        char cpfstr[12];
         int contador = 1;
         srand(time(NULL));
 
@@ -32,56 +34,93 @@ int leitor_csv(){
 
         // Abre o arquivo CSV para leitura
         //abrir os outros aquivos de csv
-        file = fopen("C:\\Users\\Usuario\\CLionProjects\\untitled\\teste.csv", "r");
-        //abrir o arquivo que contenha os cpfs
+        exel[0] = fopen("0.csv", "r");
+        exel[1] = fopen("1.csv", "r");
+        exel[2] = fopen("2.csv", "r");
+        exel[3] = fopen("3.csv", "r");
+        exel[4] = fopen("4.csv", "r");
+        exel[5] = fopen("5.csv", "r");
         
-
-        //fazer um loop para ler todos os csvs
-        if (file == NULL) {
-            printf("Nao foi possivel abrir o arquivo.\n");
-            return 1;
-        }
-
+        //abrir o arquivo que contenha os cpfs
+        cpf = fopen("CPF.txt","");
+        
         // Lê cada linha do arquivo
-        while (fgets(line, sizeof(line), file)) {
-            char *field;
-            char fieldCopy[MAX_FIELD_LENGTH];
-
-            // Copia a linha para uma variável temporária
-            strncpy(fieldCopy, line, sizeof(fieldCopy));
-
-            // Extrai cada campo separado por vírgula
-            field = strtok(fieldCopy, delimiter);
-
-            int atual = 0;
-            int colunas[] = { 2,4, 6, 9, 11,21,23,25,28};
-            int size = sizeof (colunas)/sizeof(int);
-
-
-            printf("%d, ",contador);
-            //declaração da variavel que vai conter o dado
-            //Dado *dado;
-            while (field != NULL) {
-
-                if(findColum(colunas, size,atual)==1){
-                    //sequencia de ifs atribuindo os dados 
-                    if(colunas[atual] == 2){
-                        //dado->idade = field;
-                    }
-                    // Imprime o valor do campo
-                    printf("%s, ", field);
-                }
-
-                // Obtém o próximo campo
-                field = strtok(NULL, delimiter);
-                atual += 1;
-
+        for(int i = 0; i < 6; i++){
+            if (exel[i] == NULL) {
+                printf("Nao foi possivel abrir o arquivo.\n");
+                return 1;
             }
-            printf("\n");
-            contador ++;
-        }
+            while (fgets(line, sizeof(line), exel[i]) && fgets(cpfstr,12,cpf)) {
+                char *field;
+                char fieldCopy[MAX_FIELD_LENGTH];
 
+                // Copia a linha para uma variável temporária
+                strncpy(fieldCopy, line, sizeof(fieldCopy));
+
+                // Extrai cada campo separado por vírgula
+                field = strtok(fieldCopy, delimiter);
+
+                int atual = 0;
+                int colunas[] = { 2,4, 6, 9, 11,21,23,25,28};
+                int size = sizeof (colunas)/sizeof(int);
+
+
+                printf("%d, ",contador);
+                //declaração da variavel que vai conter o dado
+                Dado *dado;
+                while (field != NULL) {
+                    if(findColum(colunas, size,atual)==1){
+                        //sequencia de ifs atribuindo os dados 
+                       switch (atual)
+                       {
+                       case 2:
+                        dado->idade = field;
+                        break;
+                       case 4:
+                        dado->sexo = field;
+                        break;
+                       case 6:
+                        dado->cor = field;
+                        break;
+                       case 9:
+                        dado->municipio = field;
+                        break;
+                       case 11:
+                        dado->uf = field;
+                        break;
+                       case 21:
+                        dado->grupoAtendimento = field;
+                        break;
+                       case 23:
+                        dado->categoria = field;
+                        break;
+                       case 25:
+                        dado->fabricante = field;
+                        break;
+                       case 28:
+                        dado->dose = field;
+                        break;
+                       default:
+                       printf("fudeu geral!!\n");
+                        break;
+                       }
+                        // Imprime o valor do campo
+                        //printf("%s, ", field);
+                    }
+
+                    // Obtém o próximo campo
+                    field = strtok(NULL, delimiter);
+                    atual += 1;
+
+                }
+                insert_inicio(atoll(cpfstr), dado, skiplist);
+                //printf("\n");
+                contador ++;
+            }
+        }
         // Fecha o arquivo
-        fclose(file);
+        for(int i = 0; i < 6; i++){
+            fclose(exel[i]);
+        }
         return 0;
 }

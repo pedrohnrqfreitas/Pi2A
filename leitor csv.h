@@ -13,6 +13,6 @@
 #define delimiter ";"
 
 int findColum(int *array, int size, int colum);
-int leitor_csv();
+int leitor_csv(Skiplist *skiplist);
 
 #endif

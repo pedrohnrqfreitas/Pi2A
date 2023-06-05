@@ -5,21 +5,23 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define max_level 6
+#define max_level 22
 
 typedef struct Dado{
-    char idade[4];
-    char sexo[2];
-    char cor[21];
-    char municipio[31];
-    char grupoAtendimento[61];
-    char categoria[31];
-    char fabricante[31];
-    char dose[16];
+    char *idade;
+    char *sexo;
+    char *cor;
+    char *municipio;
+    char *uf;
+    char *grupoAtendimento;
+    char *categoria;
+    char *fabricante;
+    char *dose;
 }Dado;
 
 typedef struct Node{
-    int key;
+    long long int key;
+    Dado *dado;
     struct Node* next[max_level];
 } Node;
 
@@ -30,11 +32,11 @@ typedef struct skiplist{
 
 int rand_level();
 Skiplist* create_skiplist();
-Node* create_node(int level,Dado dado);
-void insert_inicio(int key,Dado dado, Skiplist* lista);
-void insert(int key, Dado dado, Skiplist *lista);
+Node* create_node(int level,Dado *dado);
+void insert_inicio(long long int key,Dado *dado, Skiplist* lista);
+void insert(long long int key, Dado *dado, Skiplist *lista);
 void print_skiplist(Skiplist* skiplist);
-int search(int key, Skiplist *lista);
-int remover(int key, Skiplist *lista);
+int search(long long int key, Skiplist *lista);
+int remover(long long int key, Skiplist *lista);
 
 #endif

@@ -3,21 +3,22 @@
 #include <time.h>
 
 //define
-#define max_level 6
+#define max_level 22
 
 //structs
 typedef struct Dado{
-    char idade[4];
-    char sexo[2];
-    char cor[21];
-    char municipio[31];
-    char grupoAtendimento[61];
-    char categoria[31];
-    char fabricante[31];
-    char dose[16];
+    char *idade;
+    char *sexo;
+    char *cor;
+    char *municipio;
+    char *uf;
+    char *grupoAtendimento;
+    char *categoria;
+    char *fabricante;
+    char *dose;
 }Dado;
 typedef struct Node{
-    int key;
+    long long int key;
     Dado *dado;
     struct Node* next[max_level];
 }Node;
@@ -48,13 +49,13 @@ Skiplist* create_skiplist(){
     return skiplist;
 }
 
-Node* create_node(int level,Dado dado){
+Node* create_node(int level,Dado *dado){
     Node* newnode = (Node*) malloc(sizeof(Node));
-    newnode->dado = &dado;
+    newnode->dado = dado;
     return newnode;
 }
 
-void insert_inicio(int key,Dado dado, Skiplist* lista){
+void insert_inicio(long long int key,Dado *dado, Skiplist* lista){
     int level = rand_level();
     Node* aux = create_node(level,dado);
     aux->key = key;
@@ -65,7 +66,7 @@ void insert_inicio(int key,Dado dado, Skiplist* lista){
     }
 }
 
-void insert(int key, Dado dado, Skiplist *lista) {
+void insert(long long int key, Dado *dado, Skiplist *lista) {
     if (lista->inicio[0] == NULL) {
         insert_inicio(key, dado, lista);
     } 
@@ -112,7 +113,7 @@ void print_skiplist(Skiplist* skiplist){
     }
 }
 
-Node *search(int key, Skiplist *lista){
+Node *search(long long int key, Skiplist *lista){
     for(int i = max_level - 1; i >= 0; i--){
         Node *aux = lista->inicio[i];
         if(aux == NULL){
@@ -130,7 +131,7 @@ Node *search(int key, Skiplist *lista){
     return NULL;
 }
 
-int remover(int key, Skiplist *lista){
+int remover(long long int key, Skiplist *lista){
     if (lista->inicio[0] == NULL) {
         return 0;
     } 
