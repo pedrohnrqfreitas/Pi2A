@@ -36,7 +36,7 @@ Node* create_node(int level,Dado *dado);
 void insert_inicio(long long int key,Dado *dado, Skiplist* lista);
 void insert(long long int key, Dado *dado, Skiplist *lista);
 void print_skiplist(Skiplist* skiplist);
-int search(long long int key, Skiplist *lista);
+Node* search(long long int key, Skiplist *lista);
 int remover(long long int key, Skiplist *lista);
 
 #endif
