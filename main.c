@@ -23,6 +23,7 @@ int main(){
     fim = clock();
     tempo = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
     printf("tempo de execucao: %.2f \n", tempo);
+    //print_skiplist(skiplist);
     opcao();
     scanf("%d", &v);
     while(v< 4 && v > 0){

@@ -50,7 +50,8 @@ int leitor_csv(Skiplist *skiplist){
                 printf("Nao foi possivel abrir o arquivo.\n");
                 return 1;
             }
-            while (fgets(line, sizeof(line), exel[i]) && fgets(cpfstr,12,cpf)) {
+            while (fgets(line, sizeof(line), exel[i]) && fgets(cpfstr,13,cpf)) {
+                //printf("%s", cpfstr);
                 char *field;
                 char fieldCopy[MAX_FIELD_LENGTH];
 
@@ -113,7 +114,10 @@ int leitor_csv(Skiplist *skiplist){
                     atual += 1;
 
                 }
-                insert_inicio(atoll(cpfstr), &dado, skiplist);
+                char *ptr;
+                long long int key = atoll(cpfstr);
+                //printf("%lld\n", key);
+                insert_inicio(key, &dado, skiplist);
                 //printf("\n");
                 contador ++;
             }
