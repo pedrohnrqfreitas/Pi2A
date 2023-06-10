@@ -19,7 +19,7 @@ typedef struct Dado{
 }Dado;
 typedef struct Node{
     long long int key;
-    Dado *dado;
+    struct Dado *dado;
     struct Node* next[max_level];
 }Node;
 
@@ -55,6 +55,25 @@ Node* create_node(int level,Dado *dado){
     return newnode;
 }
 
+Node *search(long long int key, Skiplist *lista){
+    for(int i = max_level - 1; i >= 0; i--){
+        Node *aux = lista->inicio[i];
+        if(aux == NULL){
+            continue;
+        }
+        else{
+            while(aux != NULL && aux->key <= key){
+                if(aux->key == key){
+                return aux;
+                }
+                aux = aux->next[i];
+            }
+        }
+    }
+    return NULL;
+}
+
+
 void insert_inicio(long long int key,Dado *dado, Skiplist* lista){
     int level = rand_level();
     Node* aux = create_node(level,dado);
@@ -66,13 +85,13 @@ void insert_inicio(long long int key,Dado *dado, Skiplist* lista){
     }
 }
 
-void insert(long long int key, Dado *dado, Skiplist *lista) {
+int insert(long long int key, Dado *dado, Skiplist *lista) {
     if (lista->inicio[0] == NULL) {
         insert_inicio(key, dado, lista);
-    } 
+    }
     else {
         int level = rand_level();
-        Node *novo = create_node(level,dado);
+        Node *novo = create_node(level, dado);
         novo->key = key;
         for(int i = level; i >= 0; i--){
             Node *aux = lista->inicio[i];
@@ -94,41 +113,28 @@ void insert(long long int key, Dado *dado, Skiplist *lista) {
             }
         }
     }
+    return 1;
 }
 
 
-void print_skiplist(Skiplist* skiplist){
+void print_skiplist(Skiplist* skiplist, int qtd){
+    int cont = 0;
     for(int i = max_level - 1; i >= 0; i--){
         Node* aux = skiplist->inicio[i];
         printf("Level %d: ", i);
         while(aux != NULL){
+            if(cont == qtd){
+                return;
+            }
             printf("%lld ", aux->key);
             aux = aux->next[i];
-            
+            cont++;
         }
         if(aux == NULL){
             printf("NULL");
         }
         printf("\n");
     }
-}
-
-Node *search(long long int key, Skiplist *lista){
-    for(int i = max_level - 1; i >= 0; i--){
-        Node *aux = lista->inicio[i];
-        if(aux == NULL){
-            continue;
-        }
-        else{
-            while(aux != NULL && aux->key <= key){
-                if(aux->key == key){
-                return aux;
-                }
-                aux = aux->next[i];
-            }
-        }
-    }
-    return NULL;
 }
 
 int remover(long long int key, Skiplist *lista){
@@ -179,4 +185,9 @@ int remover(long long int key, Skiplist *lista){
         free(aux2);
         return 1;
     }
+
+}
+Dado* CriaDado(){
+    Dado *dado = (Dado*) malloc(sizeof(Dado));
+    return dado;
 }

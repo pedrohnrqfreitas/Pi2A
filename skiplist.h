@@ -32,10 +32,11 @@ typedef struct skiplist{
 
 int rand_level();
 Skiplist* create_skiplist();
-Node* create_node(int level,Dado *dado);
-void insert_inicio(long long int key,Dado *dado, Skiplist* lista);
-void insert(long long int key, Dado *dado, Skiplist *lista);
-void print_skiplist(Skiplist* skiplist);
+Dado* CriaDado();
+Node* create_node(int level, Dado *dado);
+void insert_inicio(long long int key, Dado *dado, Skiplist* lista);
+int insert(long long int key, Dado *dado, Skiplist *lista);
+void print_skiplist(Skiplist* skiplist, int qtd);
 Node* search(long long int key, Skiplist *lista);
 int remover(long long int key, Skiplist *lista);
 
