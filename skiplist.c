@@ -56,20 +56,41 @@ Node* create_node(int level,Dado *dado){
 }
 
 Node *search(long long int key, Skiplist *lista){
-    for(int i = max_level - 1; i >= 0; i--){
-        Node *aux = lista->inicio[i];
-        if(aux == NULL){
-            continue;
-        }
-        else{
-            while(aux != NULL && aux->key <= key){
-                if(aux->key == key){
-                return aux;
-                }
-                aux = aux->next[i];
+        Node *aux = lista->inicio[max_level];
+        int i = 1;
+        printf("estou procurando\n");
+        while((aux == NULL||aux->key>key)){
+            aux = lista->inicio[max_level-i];
+            i++;
+            if(i >max_level){
+                return NULL;
             }
         }
-    }
+        if(aux->key==key){
+            return aux;
+        }
+        while(i<=max_level){
+            if(aux->next[max_level-i]==NULL){
+                i++;
+                if(i > max_level){
+                    return NULL;
+                }
+            }else{
+                if(aux->next[max_level-i]->key == key){
+                    return aux->next[max_level-i];
+                }
+                if(aux->next[max_level-i]->key>key){
+                    i++;
+                    if(i>max_level){
+                        return NULL;
+                    }
+                }
+                if(aux->next[max_level-i]->key<key){
+                    aux = aux->next[max_level-i];
+                } 
+            }
+ 
+        }
     return NULL;
 }
 
@@ -93,24 +114,41 @@ int insert(long long int key, Dado *dado, Skiplist *lista) {
         int level = rand_level();
         Node *novo = create_node(level, dado);
         novo->key = key;
-        for(int i = level; i >= 0; i--){
-            Node *aux = lista->inicio[i];
+        Node *aux = lista->inicio[level];
+        int i =level;
+        while(aux==NULL||aux->key>key){
             if(aux == NULL){
-                novo->next[i] = NULL;
                 lista->inicio[i] = novo;
-                continue;
+                novo->next[i] = NULL;                
             }
-            if(aux->key > key){
+            else{
                 novo->next[i] = lista->inicio[i];
                 lista->inicio[i] = novo;
             }
+
+            i--;
+            aux = lista->inicio[i];
+            if(i<0){
+                return 1;
+            }
+        }
+        while(i>=0){
+            if(aux->next[i]==NULL){
+                aux->next[i] = novo;
+                novo->next[i] = NULL;
+                i--;
+            }
             else{
-                while (aux->next[i] != NULL && aux->next[i]->key <= key){
+                if(aux->next[i]->key>key){
+                    novo->next[i] = aux->next[i];
+                    aux->next[i] = novo;
+                    i--;
+                }
+                else{
                     aux = aux->next[i];
                 }
-                novo->next[i] = aux->next[i];
-                aux->next[i] = novo; 
             }
+
         }
     }
     return 1;
@@ -141,49 +179,53 @@ int remover(long long int key, Skiplist *lista){
     if (lista->inicio[0] == NULL) {
         return 0;
     } 
-    else {
-        Node *update[max_level];
-        Node *aux2;
-        for(int i = 0; i < max_level; i++){
-            update[i] = NULL;
+    else{
+        Node *aux = lista->inicio[max_level];
+        int i = 1;
+        while((aux == NULL||aux->key>key)){
+            aux = lista->inicio[max_level-i];
+            i++;
+            if(i >max_level){
+                return 0;
+            }
         }
-        for(int i = max_level - 1; i >= 0; i--){
-            Node *aux = lista->inicio[i];
-            if(aux == NULL){
-                continue;
+        while(aux->key==key){
+            lista->inicio[max_level-i] = aux->next[max_level-i];
+            i++;
+            if(i>max_level){
+                free(aux->dado);
+                free(aux);
+                return 1;
             }
-            if(aux->key == key){
-                lista->inicio[i] = aux->next[i];
-            }
-            if(aux->next[i] == NULL){
-                continue;
-            }
-            else{
-                while (aux->next[i] != NULL && aux->next[i]->key < key){
-                    aux = aux->next[i];
-                    if(aux->next[i] == NULL){
-                        break;
+            aux = lista->inicio[max_level-i];
+        }
+        Node *aux2 = aux;
+        while(i<=max_level){
+            if(aux->next[max_level-i]==NULL){
+                i++;
+                if(i > max_level){
+                    return 0;
+                }
+            }else{
+                if(aux->next[max_level-i]->key == key){
+                    aux->next[max_level-i] =aux->next[max_level-i]->next[max_level-i];
+                    i++;
+                }
+                if(aux->next[max_level-i]->key>key){
+                    i++;
+                    if(i>max_level){
+                        free(aux2->dado);
+                        free(aux2);
+                        return 0;
                     }
                 }
-                if(aux->next[i] == NULL){
-                    continue;
-                }
-                if(aux->next[i]->key == key){
-                    update[i] = aux;
-                    aux2 = aux->next[i];
-                }
+                if(aux->next[max_level-i]->key<key){
+                    aux = aux->next[max_level-i];
+                } 
             }
+ 
         }
-        if(update[0] == NULL){
-                return 0;
-        }
-        for(int i = 0; i < max_level; i++){
-            if(update[i] != NULL){
-                update[i]->next[i] = aux2->next[i];
-            }
-        }
-        free(aux2);
-        return 1;
+
     }
 
 }
